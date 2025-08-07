@@ -1933,29 +1933,6 @@
             el.style.transition = 'all 0.6s ease';
             observer.observe(el);
         });
-        let mouseX = 0, mouseY = 0;
-  let followerX = 0, followerY = 0;
-
-  const cursor = document.querySelector('.cursor');
-  const follower = document.querySelector('.cursor-follower');
-
-  document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-  });
-
-  function animateCursor() {
-      cursor.style.left = mouseX + 'px';
-      cursor.style.top = mouseY + 'px';
-
-      followerX += (mouseX - followerX) * 0.15;
-      followerY += (mouseY - followerY) * 0.15;
-      follower.style.left = followerX + 'px';
-      follower.style.top = followerY + 'px';
-
-      requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
     </script>
 </body>
 </html>
