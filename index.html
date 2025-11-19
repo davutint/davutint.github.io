@@ -3,877 +3,789 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Davut İnat | Unity Developer</title>
+    <title>Davut İnat - Game Developer</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
         :root {
-            --primary: #00f3ff; /* Siber Mavi */
-            --secondary: #bc13fe; /* Neon Mor */
-            --bg-dark: #050510; /* Derin Uzay */
-            --bg-card: rgba(20, 20, 35, 0.6);
-            --text-main: #e0e6ed;
-            --text-muted: #94a3b8;
-            --border-glow: 1px solid rgba(0, 243, 255, 0.3);
-            --glass: rgba(255, 255, 255, 0.03);
+            /* Unity Dark Theme'den ilham alan renk paleti */
+            --bg-main: #202124;
+            --bg-secondary: #2d2e32;
+            --accent: #4ade80; /* Yumuşak Yeşil */
+            --accent-hover: #22c55e;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --border: #3f3f46;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: var(--bg-dark);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
             color: var(--text-main);
+            line-height: 1.7;
             overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* Özel Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { 
-            background: var(--primary); 
-            border-radius: 4px;
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        /* CRT Scanline Efekti (Monitör Hissi) */
-        .scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.3;
         }
 
         /* Typography */
-        h1, h2, h3, .nav-logo {
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        h1, h2, h3 {
+            font-weight: 800;
+            letter-spacing: -0.02em;
         }
 
-        /* Navigation */
-        nav {
+        a { text-decoration: none; transition: 0.3s; }
+
+        /* Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
             position: fixed;
-            top: 0; width: 100%;
-            padding: 20px 50px;
-            background: rgba(5, 5, 16, 0.8);
-            backdrop-filter: blur(15px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+            top: 0;
+            width: 100%;
+            background: rgba(32, 33, 36, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            padding: 20px 0;
+        }
+
+        .nav-flex {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .nav-logo {
-            font-size: 24px;
-            font-weight: 900;
-            color: var(--primary);
-            text-shadow: 0 0 15px var(--primary);
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
         }
+        .logo span { color: var(--accent); }
 
         .nav-links {
             display: flex;
-            gap: 30px;
+            gap: 32px;
             list-style: none;
         }
 
         .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
             color: var(--text-main);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.1rem;
-            position: relative;
-            padding: 5px 0;
-            transition: 0.3s;
         }
 
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; width: 0; height: 2px;
-            background: var(--primary);
-            transition: 0.3s;
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        .nav-links a:hover { color: var(--primary); }
-        .nav-links a:hover::before { width: 100%; }
-
-        .lang-btn {
-            background: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 5px 12px;
-            font-family: 'Orbitron';
+        .lang-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: 0.3s;
-            clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
-        }
-
-        .lang-btn.active, .lang-btn:hover {
-            background: var(--primary);
-            color: var(--bg-dark);
-            box-shadow: 0 0 15px var(--primary);
+            font-size: 0.85rem;
+            margin-left: 20px;
         }
 
         /* Hero Section */
         .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            text-align: center;
-            padding: 0 20px;
+            padding-top: 180px;
+            padding-bottom: 100px;
+            text-align: left;
         }
 
-        #particles-canvas {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 24px;
+            line-height: 1.1;
         }
 
-        .hero-content h1 {
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            margin-bottom: 20px;
-            background: linear-gradient(to right, #fff, var(--text-muted));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.3));
-        }
-
-        .role-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            background: rgba(0, 243, 255, 0.1);
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            font-family: 'Orbitron';
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-            position: relative;
-        }
-        
-        .role-badge::before, .role-badge::after {
-            content: ''; position: absolute; width: 4px; height: 4px; background: var(--primary);
-        }
-        .role-badge::before { top: -2px; left: -2px; }
-        .role-badge::after { bottom: -2px; right: -2px; }
-
-        .cta-container {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 40px;
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
         }
 
         .btn {
-            padding: 15px 40px;
-            font-family: 'Orbitron';
-            font-weight: bold;
-            text-decoration: none;
-            text-transform: uppercase;
-            transition: 0.3s;
-            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
-            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
         }
 
         .btn-primary {
-            background: var(--primary);
-            color: var(--bg-dark);
-            border: none;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+            background: var(--accent);
+            color: #000;
         }
+        .btn-primary:hover { background: var(--accent-hover); }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 40px rgba(0, 243, 255, 0.6);
-        }
-
-        .btn-secondary {
-            background: transparent;
+        .btn-outline {
+            border: 1px solid var(--border);
             color: var(--text-main);
-            border: 1px solid rgba(255,255,255,0.3);
+            margin-left: 16px;
+        }
+        .btn-outline:hover { border-color: var(--text-muted); background: var(--bg-secondary); }
+
+        /* Section Base */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
         }
         
-        .btn-secondary:hover {
-            border-color: var(--secondary);
-            color: var(--secondary);
-            box-shadow: 0 0 20px rgba(188, 19, 254, 0.4);
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 4px;
+            background: var(--accent);
+            margin-top: 10px;
+            border-radius: 2px;
         }
 
-        /* Section Styles */
-        section {
-            padding: 100px 0;
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .section-header {
-            margin-bottom: 60px;
-            text-align: center;
-            position: relative;
-        }
-
-        .section-header h2 {
-            font-size: 3rem;
-            color: var(--text-main);
-            display: inline-block;
-            border-bottom: 3px solid var(--secondary);
-            padding-bottom: 10px;
-        }
-
-        /* About Grid */
+        /* About */
         .about-grid {
             display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 50px;
-            padding: 0 20px;
-            align-items: center;
+            grid-template-columns: 2fr 1fr;
+            gap: 60px;
+            align-items: start;
         }
+        .about-text p { margin-bottom: 20px; color: var(--text-muted); }
 
-        .avatar-container {
-            width: 100%;
-            aspect-ratio: 1;
-            background: radial-gradient(circle at center, rgba(188,19,254,0.2) 0%, transparent 70%);
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 8rem;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .about-text p {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            color: var(--text-muted);
-        }
-
-        /* Experience Timeline (Tech Tree Style) */
-        .timeline {
-            position: relative;
-            margin: 50px 20px;
-            border-left: 2px solid rgba(0, 243, 255, 0.2);
-        }
-
-        .timeline-item {
-            margin-left: 30px;
+        /* Experience - Minimal Timeline */
+        .experience-item {
+            border-left: 2px solid var(--border);
+            padding-left: 30px;
             margin-bottom: 50px;
             position: relative;
         }
 
-        .timeline-item::before {
+        .experience-item::before {
             content: '';
             position: absolute;
-            left: -39px;
-            top: 0;
-            width: 16px;
-            height: 16px;
-            background: var(--bg-dark);
-            border: 2px solid var(--primary);
+            left: -6px; top: 0;
+            width: 10px; height: 10px;
+            background: var(--accent);
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--primary);
         }
 
-        .timeline-content {
-            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-            padding: 25px;
-            border: 1px solid rgba(255,255,255,0.05);
-            border-left: 3px solid var(--primary);
-            border-radius: 0 15px 15px 0;
-            transition: 0.3s;
-        }
-
-        .timeline-content:hover {
-            background: linear-gradient(145deg, rgba(0,243,255,0.1) 0%, rgba(0,0,0,0) 100%);
-            transform: translateX(10px);
-        }
-
-        .timeline-date {
-            font-family: 'Orbitron';
-            color: var(--primary);
+        .exp-date {
             font-size: 0.9rem;
+            color: var(--text-muted);
             margin-bottom: 5px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Project Cards (Holographic) */
+        .exp-title { font-size: 1.5rem; margin-bottom: 5px; }
+        .exp-company { color: var(--accent); font-weight: 600; margin-bottom: 15px; }
+        .exp-list { padding-left: 20px; color: var(--text-muted); }
+        .exp-list li { margin-bottom: 5px; }
+
+        /* Projects - Masonry Grid Style */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            padding: 0 20px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
         }
 
         .project-card {
-            background: var(--bg-card);
-            border: var(--border-glow);
-            border-radius: 15px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             overflow: hidden;
-            transition: 0.3s;
-            position: relative;
-            transform-style: preserve-3d;
+            transition: transform 0.2s, border-color 0.2s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* 3D Tilt efekti JS ile kontrol edilecek ama base hover */
         .project-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-            border-color: var(--secondary);
+            transform: translateY(-5px);
+            border-color: var(--accent);
         }
 
-        .project-image {
-            height: 200px;
-            background: linear-gradient(45deg, #1a1a2e, #16213e);
+        .project-icon {
+            height: 140px;
+            background: #3f3f46;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 4rem;
         }
 
-        .project-info {
-            padding: 25px;
-        }
-
-        .project-tags {
+        .project-body {
+            padding: 24px;
+            flex-grow: 1;
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 15px 0;
+            flex-direction: column;
         }
 
-        .tech-tag {
-            font-size: 0.8rem;
+        .badge {
+            display: inline-block;
+            font-size: 0.75rem;
             padding: 4px 10px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 4px;
-            color: var(--primary);
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .badge-released { background: rgba(74, 222, 128, 0.1); color: var(--accent); }
+        .badge-proto { background: rgba(255, 255, 255, 0.1); color: var(--text-muted); }
+        .badge-jam { background: rgba(251, 191, 36, 0.1); color: #fbbf24; }
+
+        .project-title { font-size: 1.25rem; margin-bottom: 10px; }
+        .project-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
         }
 
-        /* Filter Buttons */
-        .filter-container {
+        .tech-item {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--bg-main);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 15px;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
+
+        .link-btn {
+            color: var(--text-main);
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .link-btn:hover { color: var(--accent); }
+
+        /* Skills - Clean Tags */
+        .skills-wrapper {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .skill-category h3 {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .skill-tag {
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+
+        /* Contact */
+        .contact-section {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .contact-links {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 50px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 10px 25px;
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.2);
-            color: var(--text-muted);
-            font-family: 'Rajdhani';
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            border-radius: 30px;
-        }
-
-        .filter-btn.active, .filter-btn:hover {
-            background: var(--secondary);
-            color: white;
-            border-color: var(--secondary);
-            box-shadow: 0 0 15px rgba(188, 19, 254, 0.4);
-        }
-
-        /* Skills (HUD Style) */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 30px;
-            padding: 0 20px;
+            margin-top: 30px;
         }
 
-        .skill-box {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--text-muted);
-            padding: 20px;
-            position: relative;
-        }
-
-        .skill-box::before {
-            content: ''; position: absolute; top: -1px; left: -1px; width: 20px; height: 20px;
-            border-top: 2px solid var(--primary); border-left: 2px solid var(--primary);
-        }
-        .skill-box::after {
-            content: ''; position: absolute; bottom: -1px; right: -1px; width: 20px; height: 20px;
-            border-bottom: 2px solid var(--primary); border-right: 2px solid var(--primary);
-        }
-
-        .skill-box h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
-        }
-
-        .skill-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
+        .social-icon {
+            font-size: 2rem;
             color: var(--text-muted);
         }
+        .social-icon:hover { color: var(--text-main); transform: scale(1.1); }
 
-        .skill-level {
-            color: var(--secondary);
-        }
-
-        /* Contact Form */
-        .contact-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            padding: 0 20px;
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 15px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            margin-bottom: 20px;
-            font-family: 'Rajdhani';
-            font-size: 1rem;
-            transition: 0.3s;
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 80px;
         }
 
         /* Mobile */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%; left: 0; width: 100%;
-                background: var(--bg-dark);
-                flex-direction: column;
-                padding: 20px;
-                border-bottom: 1px solid var(--primary);
-            }
-            .nav-links.active { display: flex; }
-            .mobile-toggle { display: block; color: white; font-size: 1.5rem; }
-            .about-grid, .contact-wrapper { grid-template-columns: 1fr; }
-            .hero-content h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .about-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.5rem; }
         }
-        .mobile-toggle { display: none; background: none; border: none; cursor: pointer;}
     </style>
 </head>
 <body>
 
-    <div class="scanlines"></div>
+    <header>
+        <div class="container nav-flex">
+            <div class="logo">DAVUT<span>.İNAT</span></div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#about" data-tr="nav-about">Hakkımda</a></li>
+                    <li><a href="#experience" data-tr="nav-experience">Deneyim</a></li>
+                    <li><a href="#projects" data-tr="nav-projects">Projeler</a></li>
+                    <li><a href="#contact" data-tr="nav-contact">İletişim</a></li>
+                </ul>
+            </nav>
+            <button class="lang-toggle" onclick="toggleLang()">TR / EN</button>
+        </div>
+    </header>
 
-    <nav>
-        <div class="nav-logo">DAVUT.<span style="color:white">DEV</span></div>
-        <button class="mobile-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="#home" data-tr="nav-home">ANA SAYFA</a></li>
-            <li><a href="#about" data-tr="nav-about">HAKKIMDA</a></li>
-            <li><a href="#projects" data-tr="nav-projects">PROJELER</a></li>
-            <li><a href="#skills" data-tr="nav-skills">YETENEKLER</a></li>
-            <li><a href="#contact" data-tr="nav-contact">İLETİŞİM</a></li>
-            <li style="margin-left: 20px;">
-                <button class="lang-btn active" onclick="setLanguage('tr')">TR</button>
-                <button class="lang-btn" onclick="setLanguage('en')">EN</button>
-            </li>
-        </ul>
-    </nav>
-
-    <section id="home" class="hero">
-        <canvas id="particles-canvas"></canvas>
-        <div class="hero-content">
-            <div class="role-badge">UNITY GAME DEVELOPER</div>
-            <h1>DAVUT İNAT</h1>
-            <p data-tr="hero-desc" style="font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto;">
-                Mobil ve WebGL dünyasında fikirleri oynanabilir deneyimlere dönüştürüyorum. Kod ve yaratıcılığın kesişim noktası.
-            </p>
-            <div class="cta-container">
-                <a href="#projects" class="btn btn-primary" data-tr="hero-btn-projects">PROJELERİ GÖR</a>
-                <a href="#contact" class="btn btn-secondary" data-tr="hero-btn-contact">İLETİŞİM</a>
-            </div>
+    <section class="hero container">
+        <h1 data-tr="hero-title">Merhaba, Ben Davut.<br>Oyun Geliştiricisiyim.</h1>
+        <p data-tr="hero-desc">
+            Unity kullanarak mobil ve web platformları için fikirleri etkileşimli deneyimlere dönüştürüyorum. Sürekli öğrenen, clean code seven bir geliştiriciyim.
+        </p>
+        <div>
+            <a href="#projects" class="btn btn-primary">
+                <i class="fas fa-gamepad"></i> <span data-tr="btn-projects">Projelerimi Gör</span>
+            </a>
+            <a href="#contact" class="btn btn-outline">
+                <i class="fas fa-envelope"></i> <span data-tr="btn-contact">İletişime Geç</span>
+            </a>
         </div>
     </section>
 
-    <section id="about">
-        <div class="section-header">
-            <h2 data-tr="about-title">HAKKIMDA</h2>
-        </div>
+    <section id="about" class="container">
+        <h2 class="section-title" data-tr="about-title">Hakkımda</h2>
         <div class="about-grid">
-            <div class="avatar-container">
-                <i class="fas fa-gamepad" style="color: var(--primary); filter: drop-shadow(0 0 20px var(--primary));"></i>
-            </div>
             <div class="about-text">
-                <h3 style="color: var(--secondary); margin-bottom: 15px; font-size: 1.8rem;">Level 3+ Developer</h3>
-                <p data-tr="about-text1">
-                    3+ yıllık deneyime sahip, kod yazmayı bir sanat formu olarak gören bir Unity Geliştiricisiyim. Mobil ve WebGL platformlarında 5'ten fazla yayınlanmış oyunum var.
+                <p data-tr="about-p1">
+                    Kendini geliştirmeye odaklanmış bir Unity Geliştiricisiyim. Yaklaşık 3 yıldır mobil ve WebGL platformlarında oyun geliştiriyor, 5'ten fazla yayınlanmış projede emeğim bulunuyor.
                 </p>
-                <p data-tr="about-text2">
-                    Sadece kod yazmıyorum; mekanik tasarlıyor, performans optimize ediyor ve oyuncu deneyimini (UX) en üst düzeye çıkarıyorum.
-                </p>
-                <p data-tr="about-text3" style="border-left: 3px solid var(--primary); padding-left: 15px;">
-                    Teknik Yığın: C#, Unity, SOLID Prensipleri, Design Patterns, Firebase, UGS.
+                <p data-tr="about-p2">
+                    Oyun geliştirme sürecinin sadece kod yazmaktan ibaret olmadığına inanıyorum. Prototipleme, mekanik tasarımı, performans optimizasyonu ve kullanıcı deneyimi konularında titizlikle çalışıyorum. Karmaşık problemleri basit ve sürdürülebilir kod yapılarıyla çözmekten keyif alıyorum.
                 </p>
             </div>
-        </div>
-    </section>
-
-    <section id="experience">
-        <div class="section-header">
-            <h2 data-tr="exp-title">DENEYİM LOGLARI</h2>
-        </div>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-date">2024 - 2025</div>
-                    <h3>OBUR GAMES</h3>
-                    <p style="color: var(--secondary)">Game Developer</p>
-                    <p data-tr="exp-obur-1">Tower Defense ve FPS türlerinde WebGL oyun prototipleri.</p>
-                    <p data-tr="exp-obur-2">Simülasyon projesi liderliği ve geliştirmesi.</p>
+            <div style="background: var(--bg-secondary); padding: 24px; border-radius: 12px; border: 1px solid var(--border);">
+                <div style="margin-bottom: 20px;">
+                    <h4 style="font-size: 2rem; color: var(--accent);">3+</h4>
+                    <span style="color: var(--text-muted);" data-tr="stat-exp">Yıl Deneyim</span>
                 </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-date">2024 - 2024</div>
-                    <h3>VELO GAMES</h3>
-                    <p style="color: var(--secondary)">Intern Game Developer</p>
-                    <p data-tr="exp-velo-1">Match-3 ve Kart oyun mekanikleri.</p>
-                    <p data-tr="exp-velo-2">Firebase entegrasyonu ve veri analitiği.</p>
+                <div style="margin-bottom: 20px;">
+                    <h4 style="font-size: 2rem; color: var(--accent);">5+</h4>
+                    <span style="color: var(--text-muted);" data-tr="stat-games">Yayınlanan Oyun</span>
                 </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-content">
-                    <div class="timeline-date">2020 - PRESENT</div>
-                    <h3>FREELANCE / INDIE</h3>
-                    <p style="color: var(--secondary)">Solo Developer</p>
-                    <p data-tr="exp-free-1">App Store & Google Play'de 5+ yayınlanmış oyun.</p>
+                <div>
+                    <h4 style="font-size: 2rem; color: var(--accent);">10+</h4>
+                    <span style="color: var(--text-muted);" data-tr="stat-projects">Toplam Proje</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="projects">
-        <div class="section-header">
-            <h2 data-tr="projects-title">PROJE ENVANTERİ</h2>
-        </div>
+    <section id="experience" class="container">
+        <h2 class="section-title" data-tr="exp-title">Deneyim</h2>
         
-        <div class="filter-container">
-            <button class="filter-btn active" data-filter="all" data-tr="filter-all">TÜMÜ</button>
-            <button class="filter-btn" data-filter="released" data-tr="filter-released">YAYINLANMIŞ</button>
-            <button class="filter-btn" data-filter="prototype" data-tr="filter-prototype">PROTOTİPLER</button>
+        <div class="experience-item">
+            <span class="exp-date">2024 - 2025</span>
+            <h3 class="exp-title" data-tr="role-obur">Game Developer</h3>
+            <div class="exp-company">OBUR GAMES</div>
+            <ul class="exp-list">
+                <li data-tr="exp-obur-1">Tower Defense ve FPS türlerinde 2 prototip web oyunu geliştirdim.</li>
+                <li data-tr="exp-obur-2">4 ay boyunca bir simülasyon projesinin tek sorumlusu olarak çalıştım.</li>
+            </ul>
         </div>
 
+        <div class="experience-item">
+            <span class="exp-date">2024 - 2024</span>
+            <h3 class="exp-title" data-tr="role-velo">Game Development Intern</h3>
+            <div class="exp-company">VELO GAMES</div>
+            <ul class="exp-list">
+                <li data-tr="exp-velo-1">Match 3 ve kart oyunları geliştiren ekipte görev aldım.</li>
+                <li data-tr="exp-velo-2">Firebase ile veri analitiği entegrasyonlarını sağladım.</li>
+            </ul>
+        </div>
+
+        <div class="experience-item">
+            <span class="exp-date">2020 - Günümüz</span>
+            <h3 class="exp-title" data-tr="role-indie">Indie Game Developer</h3>
+            <div class="exp-company">FREELANCE</div>
+            <ul class="exp-list">
+                <li data-tr="exp-free-1">App Store ve Google Play'de 5+ mobil oyun yayınladım.</li>
+                <li data-tr="exp-free-2">Tasarım, kodlama ve yayınlama süreçlerini bağımsız olarak yönettim.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="projects" class="container">
+        <h2 class="section-title" data-tr="projects-title">Projeler</h2>
         <div class="projects-grid">
-            <div class="project-card" data-category="released">
-                <div class="project-image">🌾</div>
-                <div class="project-info">
-                    <div style="display:flex; justify-content:space-between;">
-                        <h3 style="color:var(--primary)">Awakened</h3>
-                        <span style="font-size:0.8rem; color:var(--secondary); border:1px solid var(--secondary); padding:2px 8px; border-radius:4px;">STORE</span>
-                    </div>
-                    <p class="project-desc" data-tr="proj-awakened-desc" style="font-size:0.9rem; color:var(--text-muted); margin: 10px 0;">Zombi kıyametinde çiftlik simülasyonu.</p>
-                    <div class="project-tags">
-                        <span class="tech-tag">Unity</span>
-                        <span class="tech-tag">IronSource</span>
-                        <span class="tech-tag">IAP</span>
-                    </div>
-                    <a href="#" class="btn-secondary" style="display:inline-block; margin-top:10px; font-size:0.8rem; padding:5px 15px;">INSPECT</a>
-                </div>
-            </div>
-
-            <div class="project-card" data-category="released">
-                <div class="project-image">🪙</div>
-                <div class="project-info">
-                    <div style="display:flex; justify-content:space-between;">
-                        <h3 style="color:var(--primary)">Coins Sort</h3>
-                        <span style="font-size:0.8rem; color:var(--secondary); border:1px solid var(--secondary); padding:2px 8px; border-radius:4px;">STORE</span>
-                    </div>
-                    <p class="project-desc" data-tr="proj-coins-desc" style="font-size:0.9rem; color:var(--text-muted); margin: 10px 0;">Stratejik bulmaca ve sıralama oyunu.</p>
-                    <div class="project-tags">
-                        <span class="tech-tag">Puzzle</span>
-                        <span class="tech-tag">Algorithm</span>
-                    </div>
-                    <a href="#" class="btn-secondary" style="display:inline-block; margin-top:10px; font-size:0.8rem; padding:5px 15px;">INSPECT</a>
-                </div>
-            </div>
-
-            <div class="project-card" data-category="prototype">
-                <div class="project-image">🧟</div>
-                <div class="project-info">
-                    <div style="display:flex; justify-content:space-between;">
-                        <h3 style="color:var(--primary)">Zombie Crusher</h3>
-                        <span style="font-size:0.8rem; color:#ff9900; border:1px solid #ff9900; padding:2px 8px; border-radius:4px;">TECH DEMO</span>
-                    </div>
-                    <p class="project-desc" data-tr="proj-zombie-desc" style="font-size:0.9rem; color:var(--text-muted); margin: 10px 0;">DOTS/ECS vs GameObject performans testi.</p>
-                    <div class="project-tags">
-                        <span class="tech-tag">ECS</span>
-                        <span class="tech-tag">Burst</span>
-                        <span class="tech-tag">Jobs</span>
-                    </div>
-                    <a href="#" class="btn-secondary" style="display:inline-block; margin-top:10px; font-size:0.8rem; padding:5px 15px;">INSPECT</a>
-                </div>
-            </div>
             
+            <div class="project-card">
+                <div class="project-icon">🌾</div>
+                <div class="project-body">
+                    <div><span class="badge badge-released" data-tr="cat-released">Yayınlanmış</span></div>
+                    <h3 class="project-title">Awakened: Farm Of The Fallen</h3>
+                    <p class="project-desc" data-tr="desc-awakened">Zombi apokalipsi temalı çiftlik simülasyon oyunu. Hayatta kalma ve strateji.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">Unity</span>
+                        <span class="tech-item">Mobile</span>
+                        <span class="tech-item">IAP</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://apps.apple.com/tr/app/awakened-farm-of-the-fallen/id6737528235" target="_blank" class="link-btn"><i class="fab fa-apple"></i> App Store</a>
+                    </div>
+                </div>
             </div>
+
+            <div class="project-card">
+                <div class="project-icon">🪙</div>
+                <div class="project-body">
+                    <div><span class="badge badge-released" data-tr="cat-released">Yayınlanmış</span></div>
+                    <h3 class="project-title">Coins Sort</h3>
+                    <p class="project-desc" data-tr="desc-coins">Bulmaca tabanlı coin sıralama oyunu. Stratejik düşünme gerektirir.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">Unity</span>
+                        <span class="tech-item">Puzzle</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://apps.apple.com/tr/app/coins-sort/id6575390516" target="_blank" class="link-btn"><i class="fab fa-apple"></i> App Store</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-icon">🪐</div>
+                <div class="project-body">
+                    <div><span class="badge badge-released" data-tr="cat-released">Yayınlanmış</span></div>
+                    <h3 class="project-title">Suika: Merge Solar System</h3>
+                    <p class="project-desc" data-tr="desc-suika">Güneş sistemi temalı birleştirme (Merge) oyunu.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">Unity</span>
+                        <span class="tech-item">Physics</span>
+                        <span class="tech-item">Google Play</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://play.google.com/store/apps/details?id=com.PixiCorp.MergeSolarSystem" target="_blank" class="link-btn"><i class="fab fa-google-play"></i> Play Store</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-icon">🍉</div>
+                <div class="project-body">
+                    <div><span class="badge badge-released" data-tr="cat-released">Yayınlanmış</span></div>
+                    <h3 class="project-title">Watermelon: Merge Solar</h3>
+                    <p class="project-desc" data-tr="desc-watermelon">Popüler watermelon oyununun uzay temalı iOS versiyonu.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">Unity</span>
+                        <span class="tech-item">2D</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://apps.apple.com/tr/app/watermelon-merge-solar-system/id6472978476" target="_blank" class="link-btn"><i class="fab fa-apple"></i> App Store</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-icon">🏀</div>
+                <div class="project-body">
+                    <div><span class="badge badge-released" data-tr="cat-released">Yayınlanmış</span></div>
+                    <h3 class="project-title">Balls To Hoop</h3>
+                    <p class="project-desc" data-tr="desc-balls">Fizik tabanlı basketbol atış oyunu. Zamanla yarışın.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">Unity</span>
+                        <span class="tech-item">Casual</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://apps.apple.com/tr/app/balls-to-hoop/id6470893960" target="_blank" class="link-btn"><i class="fab fa-apple"></i> App Store</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-icon">🏢</div>
+                <div class="project-body">
+                    <div><span class="badge badge-proto" data-tr="cat-proto">Prototip</span></div>
+                    <h3 class="project-title">Luxury Store Simulator</h3>
+                    <p class="project-desc" data-tr="desc-luxury">Lüks mağaza yönetimi simülasyonu. Envanter ve müşteri yönetimi.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">Simulation</span>
+                        <span class="tech-item">3D</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://www.youtube.com/watch?v=9tjIN3zcKV8" target="_blank" class="link-btn"><i class="fab fa-youtube"></i> Video</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-icon">🔫</div>
+                <div class="project-body">
+                    <div><span class="badge badge-proto" data-tr="cat-proto">Prototip</span></div>
+                    <h3 class="project-title">Revenge Of Chicken (FPS)</h3>
+                    <p class="project-desc" data-tr="desc-fps">Mizahi bir dille hazırlanmış hızlı tempolu FPS prototipi.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">FPS</span>
+                        <span class="tech-item">WebGL</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://www.youtube.com/watch?v=vd87CFNRb6g" target="_blank" class="link-btn"><i class="fab fa-youtube"></i> Video</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-icon">🏰</div>
+                <div class="project-body">
+                    <div><span class="badge badge-proto" data-tr="cat-proto">Prototip</span></div>
+                    <h3 class="project-title">Revenge Of Chicken (TD)</h3>
+                    <p class="project-desc" data-tr="desc-td">Tower Defense mekanikleri ile strateji oyunu.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">Strategy</span>
+                        <span class="tech-item">AI</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://www.youtube.com/watch?v=lxBjNsbg7P0" target="_blank" class="link-btn"><i class="fab fa-youtube"></i> Video</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-icon">🧟</div>
+                <div class="project-body">
+                    <div><span class="badge badge-proto" style="color:orange; background:rgba(255,165,0,0.1)">Tech Demo</span></div>
+                    <h3 class="project-title">Zombie Crusher</h3>
+                    <p class="project-desc" data-tr="desc-zombie">GameObject vs DOTS/ECS performans karşılaştırma projesi.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">DOTS</span>
+                        <span class="tech-item">ECS</span>
+                        <span class="tech-item">Optimization</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://youtu.be/BSodY6WueNM" target="_blank" class="link-btn"><i class="fab fa-youtube"></i> DOTS Video</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-icon">👻</div>
+                <div class="project-body">
+                    <div><span class="badge badge-jam" data-tr="cat-jam">Game Jam</span></div>
+                    <h3 class="project-title">Bully In The Graveyard</h3>
+                    <p class="project-desc" data-tr="desc-bully">48 saatlik Game Jam kapsamında geliştirilen atmosferik oyun.</p>
+                    <div class="tech-stack">
+                        <span class="tech-item">Jam</span>
+                        <span class="tech-item">Atmospheric</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://davutint.itch.io/bully" target="_blank" class="link-btn"><i class="fas fa-gamepad"></i> Itch.io</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </section>
 
-    <section id="skills">
-        <div class="section-header">
-            <h2 data-tr="skills-title">YETENEK AĞACI</h2>
-        </div>
-        <div class="skills-grid">
-            <div class="skill-box">
-                <h3>CORE</h3>
-                <div class="skill-item"><span>Unity 3D/2D</span> <span class="skill-level">LVL 90</span></div>
-                <div class="skill-item"><span>C# Scripting</span> <span class="skill-level">LVL 95</span></div>
-                <div class="skill-item"><span>OOP / SOLID</span> <span class="skill-level">LVL 85</span></div>
+    <section id="skills" class="container">
+        <h2 class="section-title" data-tr="skills-title">Yetenekler & Araçlar</h2>
+        <div class="skills-wrapper">
+            <div class="skill-category">
+                <h3 data-tr="skill-main">Teknolojiler</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Unity 3D/2D</span>
+                    <span class="skill-tag">C#</span>
+                    <span class="skill-tag">Game Design</span>
+                    <span class="skill-tag">OOP & SOLID</span>
+                    <span class="skill-tag">DOTS (Temel)</span>
+                </div>
             </div>
-            <div class="skill-box">
-                <h3>SYSTEMS</h3>
-                <div class="skill-item"><span>DOTS / ECS</span> <span class="skill-level">LVL 40</span></div>
-                <div class="skill-item"><span>Addressables</span> <span class="skill-level">LVL 70</span></div>
-                <div class="skill-item"><span>Optimization</span> <span class="skill-level">LVL 80</span></div>
-            </div>
-            <div class="skill-box">
-                <h3>SERVICES</h3>
-                <div class="skill-item"><span>Firebase</span> <span class="skill-level">LVL 75</span></div>
-                <div class="skill-item"><span>IronSource</span> <span class="skill-level">LVL 85</span></div>
-                <div class="skill-item"><span>Git / Cloud</span> <span class="skill-level">LVL 80</span></div>
+
+            <div class="skill-category">
+                <h3 data-tr="skill-tools">Araçlar & Servisler</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Firebase</span>
+                    <span class="skill-tag">Unity Gaming Services</span>
+                    <span class="skill-tag">Git & GitHub</span>
+                    <span class="skill-tag">IronSource</span>
+                    <span class="skill-tag">Google Play Services</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="contact">
-        <div class="section-header">
-            <h2 data-tr="contact-title">BAĞLANTI KUR</h2>
-        </div>
-        <div class="contact-wrapper">
-            <div class="contact-info">
-                <h3 style="color:white; margin-bottom:20px;">İLETİŞİM KANALLARI</h3>
-                <p style="color:var(--text-muted); margin-bottom:30px;">
-                    Yeni bir proje, iş birliği veya sadece oyun motorları hakkında konuşmak için sinyal gönderin.
-                </p>
-                <div style="display:flex; flex-direction:column; gap:15px;">
-                    <a href="#" style="color:var(--primary); text-decoration:none; font-size:1.2rem;"><i class="fas fa-envelope"></i> davutinat@gmail.com</a>
-                    <a href="#" style="color:var(--primary); text-decoration:none; font-size:1.2rem;"><i class="fab fa-linkedin"></i> LinkedIn Profili</a>
-                    <a href="#" style="color:var(--primary); text-decoration:none; font-size:1.2rem;"><i class="fab fa-github"></i> GitHub Deposu</a>
-                </div>
+    <section id="contact" class="container">
+        <div class="contact-section">
+            <h2 class="section-title" data-tr="contact-title">İletişim</h2>
+            <p data-tr="contact-desc" style="color: var(--text-muted); font-size: 1.1rem;">
+                Projeler, iş birlikleri veya sadece tanışmak için bana ulaşabilirsiniz.
+            </p>
+            <div class="contact-links">
+                <a href="mailto:davutinat@gmail.com" class="social-icon" title="Email"><i class="fas fa-envelope"></i></a>
+                <a href="https://www.linkedin.com/in/davutint/" target="_blank" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/davutint" target="_blank" class="social-icon" title="GitHub"><i class="fab fa-github"></i></a>
             </div>
-            <form class="contact-form">
-                <div class="form-group">
-                    <input type="text" placeholder="KOD ADINIZ (İSİM)">
-                </div>
-                <div class="form-group">
-                    <input type="email" placeholder="FREKANSINIZ (EMAIL)">
-                </div>
-                <div class="form-group">
-                    <textarea rows="5" placeholder="VERİ PAKETİ (MESAJ)"></textarea>
-                </div>
-                <button class="btn btn-primary" style="width:100%">GÖNDER</button>
-            </form>
         </div>
     </section>
 
-    <footer style="text-align:center; padding:40px; border-top:1px solid rgba(255,255,255,0.1); color:var(--text-muted);">
-        <p>SYSTEM STATUS: ONLINE | &copy; 2025 DAVUT İNAT</p>
+    <footer>
+        <div class="container">
+            &copy; 2025 Davut İnat. Game Developer.
+        </div>
     </footer>
 
     <script>
-        // Parçacık Efekti (Senin orijinal kodunu optimize ettim)
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        const particles = [];
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2;
-                this.speedX = (Math.random() - 0.5) * 0.5;
-                this.speedY = (Math.random() - 0.5) * 0.5;
-                this.alpha = Math.random() * 0.5 + 0.1;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
-            }
-            draw() {
-                ctx.fillStyle = `rgba(0, 243, 255, ${this.alpha})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        for(let i=0; i<50; i++) particles.push(new Particle());
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            
-            // Bağlantı Çizgileri
-            particles.forEach((a, i) => {
-                particles.slice(i + 1).forEach(b => {
-                    const dx = a.x - b.x;
-                    const dy = a.y - b.y;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
-                    if (dist < 100) {
-                        ctx.strokeStyle = `rgba(0, 243, 255, ${0.1 * (1 - dist/100)})`;
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(a.x, a.y);
-                        ctx.lineTo(b.x, b.y);
-                        ctx.stroke();
-                    }
-                });
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        // Mobil Menü
-        function toggleMenu() {
-            document.getElementById('nav-links').classList.toggle('active');
-        }
-
-        // Dil Sistemi
         const translations = {
             tr: {
-                'nav-home': 'ANA SAYFA',
-                'nav-about': 'HAKKIMDA',
-                'nav-projects': 'PROJELER',
-                'nav-skills': 'YETENEKLER',
-                'nav-contact': 'İLETİŞİM',
-                'hero-desc': 'Mobil ve WebGL dünyasında fikirleri oynanabilir deneyimlere dönüştürüyorum. Kod ve yaratıcılığın kesişim noktası.',
-                'hero-btn-projects': 'PROJELERİ GÖR',
-                'hero-btn-contact': 'İLETİŞİM',
-                'about-title': 'HAKKIMDA',
-                'about-text1': '3+ yıllık deneyime sahip, kod yazmayı bir sanat formu olarak gören bir Unity Geliştiricisiyim. Mobil ve WebGL platformlarında 5\'ten fazla yayınlanmış oyunum var.',
-                'about-text2': 'Sadece kod yazmıyorum; mekanik tasarlıyor, performans optimize ediyor ve oyuncu deneyimini (UX) en üst düzeye çıkarıyorum.',
-                'about-text3': 'Teknik Yığın: C#, Unity, SOLID Prensipleri, Design Patterns, Firebase, UGS.',
-                'exp-title': 'DENEYİM LOGLARI',
-                'projects-title': 'PROJE ENVANTERİ',
-                'filter-all': 'TÜMÜ',
-                'filter-released': 'YAYINLANMIŞ',
-                'filter-prototype': 'PROTOTİPLER',
-                'skills-title': 'YETENEK AĞACI',
-                'contact-title': 'BAĞLANTI KUR'
+                'nav-about': 'Hakkımda',
+                'nav-experience': 'Deneyim',
+                'nav-projects': 'Projeler',
+                'nav-contact': 'İletişim',
+                'hero-title': 'Merhaba, Ben Davut.<br>Oyun Geliştiricisiyim.',
+                'hero-desc': 'Unity kullanarak mobil ve web platformları için fikirleri etkileşimli deneyimlere dönüştürüyorum. Sürekli öğrenen, clean code seven bir geliştiriciyim.',
+                'btn-projects': 'Projelerimi Gör',
+                'btn-contact': 'İletişime Geç',
+                'about-title': 'Hakkımda',
+                'about-p1': 'Kendini geliştirmeye odaklanmış bir Unity Geliştiricisiyim. Yaklaşık 3 yıldır mobil ve WebGL platformlarında oyun geliştiriyor, 5\'ten fazla yayınlanmış projede emeğim bulunuyor.',
+                'about-p2': 'Oyun geliştirme sürecinin sadece kod yazmaktan ibaret olmadığına inanıyorum. Prototipleme, mekanik tasarımı, performans optimizasyonu ve kullanıcı deneyimi konularında titizlikle çalışıyorum.',
+                'stat-exp': 'Yıl Deneyim',
+                'stat-games': 'Yayınlanan Oyun',
+                'stat-projects': 'Toplam Proje',
+                'exp-title': 'Deneyim',
+                'role-obur': 'Game Developer',
+                'exp-obur-1': 'Tower Defense ve FPS türlerinde 2 prototip web oyunu geliştirdim.',
+                'exp-obur-2': '4 ay boyunca bir simülasyon projesinin tek sorumlusu olarak çalıştım.',
+                'role-velo': 'Game Development Intern',
+                'exp-velo-1': 'Match 3 ve kart oyunları geliştiren ekipte görev aldım.',
+                'exp-velo-2': 'Firebase ile veri analitiği entegrasyonlarını sağladım.',
+                'role-indie': 'Indie Game Developer',
+                'exp-free-1': 'App Store ve Google Play\'de 5+ mobil oyun yayınladım.',
+                'exp-free-2': 'Tasarım, kodlama ve yayınlama süreçlerini bağımsız olarak yönettim.',
+                'projects-title': 'Projeler',
+                'cat-released': 'Yayınlanmış',
+                'cat-proto': 'Prototip',
+                'cat-jam': 'Game Jam',
+                'desc-awakened': 'Zombi apokalipsi temalı çiftlik simülasyon oyunu. Hayatta kalma ve strateji.',
+                'desc-coins': 'Bulmaca tabanlı coin sıralama oyunu. Stratejik düşünme gerektirir.',
+                'desc-suika': 'Güneş sistemi temalı birleştirme (Merge) oyunu.',
+                'desc-watermelon': 'Popüler watermelon oyununun uzay temalı iOS versiyonu.',
+                'desc-balls': 'Fizik tabanlı basketbol atış oyunu. Zamanla yarışın.',
+                'desc-luxury': 'Lüks mağaza yönetimi simülasyonu. Envanter ve müşteri yönetimi.',
+                'desc-fps': 'Mizahi bir dille hazırlanmış hızlı tempolu FPS prototipi.',
+                'desc-td': 'Tower Defense mekanikleri ile strateji oyunu.',
+                'desc-zombie': 'GameObject vs DOTS/ECS performans karşılaştırma projesi.',
+                'desc-bully': '48 saatlik Game Jam kapsamında geliştirilen atmosferik oyun.',
+                'skills-title': 'Yetenekler & Araçlar',
+                'skill-main': 'Teknolojiler',
+                'skill-tools': 'Araçlar & Servisler',
+                'contact-title': 'İletişim',
+                'contact-desc': 'Projeler, iş birlikleri veya sadece tanışmak için bana ulaşabilirsiniz.'
             },
             en: {
-                'nav-home': 'HOME',
-                'nav-about': 'ABOUT',
-                'nav-projects': 'PROJECTS',
-                'nav-skills': 'SKILLS',
-                'nav-contact': 'CONTACT',
-                'hero-desc': 'Transforming ideas into playable experiences in Mobile and WebGL worlds. The intersection of code and creativity.',
-                'hero-btn-projects': 'VIEW PROJECTS',
-                'hero-btn-contact': 'GET IN TOUCH',
-                'about-title': 'ABOUT ME',
-                'about-text1': 'I am a Unity Developer with 3+ years of experience who views coding as an art form. I have over 5 published games on Mobile and WebGL platforms.',
-                'about-text2': 'I don\'t just write code; I design mechanics, optimize performance, and maximize player experience (UX).',
-                'about-text3': 'Tech Stack: C#, Unity, SOLID Principles, Design Patterns, Firebase, UGS.',
-                'exp-title': 'EXPERIENCE LOGS',
-                'projects-title': 'PROJECT INVENTORY',
-                'filter-all': 'ALL',
-                'filter-released': 'RELEASED',
-                'filter-prototype': 'PROTOTYPES',
-                'skills-title': 'SKILL TREE',
-                'contact-title': 'ESTABLISH LINK'
+                'nav-about': 'About',
+                'nav-experience': 'Experience',
+                'nav-projects': 'Projects',
+                'nav-contact': 'Contact',
+                'hero-title': 'Hi, I\'m Davut.<br>I Build Games.',
+                'hero-desc': 'Turning ideas into interactive experiences for mobile and web platforms using Unity. I\'m a developer who loves clean code and continuous learning.',
+                'btn-projects': 'View Projects',
+                'btn-contact': 'Get in Touch',
+                'about-title': 'About Me',
+                'about-p1': 'I am a Unity Developer focused on self-improvement. I have been developing games for mobile and WebGL platforms for about 3 years and have contributed to over 5 published projects.',
+                'about-p2': 'I believe game development is not just about writing code. I work meticulously on prototyping, mechanics design, performance optimization, and user experience.',
+                'stat-exp': 'Years Exp.',
+                'stat-games': 'Published Games',
+                'stat-projects': 'Total Projects',
+                'exp-title': 'Experience',
+                'role-obur': 'Game Developer',
+                'exp-obur-1': 'Developed 2 prototype web games in Tower Defense and FPS genres.',
+                'exp-obur-2': 'Worked as the sole person responsible for a simulation project for 4 months.',
+                'role-velo': 'Game Development Intern',
+                'exp-velo-1': 'Worked in a team developing Match 3 and card games.',
+                'exp-velo-2': 'Provided data analytics integrations with Firebase.',
+                'role-indie': 'Indie Game Developer',
+                'exp-free-1': 'Published 5+ mobile games on App Store and Google Play.',
+                'exp-free-2': 'Independently managed design, coding, and publishing processes.',
+                'projects-title': 'Projects',
+                'cat-released': 'Released',
+                'cat-proto': 'Prototype',
+                'cat-jam': 'Game Jam',
+                'desc-awakened': 'Zombie apocalypse themed farm simulation game. Survival and strategy.',
+                'desc-coins': 'Puzzle-based coin sorting game. Requires strategic thinking.',
+                'desc-suika': 'Solar system themed merge game.',
+                'desc-watermelon': 'Space-themed iOS version of the popular watermelon game.',
+                'desc-balls': 'Physics-based basketball shooting game. Race against time.',
+                'desc-luxury': 'Luxury store management simulation. Inventory and customer management.',
+                'desc-fps': 'Humorous, fast-paced FPS prototype.',
+                'desc-td': 'Strategy game with Tower Defense mechanics.',
+                'desc-zombie': 'GameObject vs DOTS/ECS performance comparison project.',
+                'desc-bully': 'Atmospheric game developed within a 48-hour Game Jam.',
+                'skills-title': 'Skills & Tools',
+                'skill-main': 'Technologies',
+                'skill-tools': 'Tools & Services',
+                'contact-title': 'Contact',
+                'contact-desc': 'Feel free to reach out for projects, collaborations, or just to say hi.'
             }
         };
 
-        function setLanguage(lang) {
-            document.querySelectorAll('[data-tr]').forEach(element => {
-                const key = element.getAttribute('data-tr');
-                if (translations[lang][key]) {
-                    element.textContent = translations[lang][key];
+        let currentLang = 'tr';
+
+        function toggleLang() {
+            currentLang = currentLang === 'tr' ? 'en' : 'tr';
+            document.querySelectorAll('[data-tr]').forEach(el => {
+                const key = el.getAttribute('data-tr');
+                if(translations[currentLang][key]) {
+                    el.innerHTML = translations[currentLang][key];
                 }
             });
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
         }
-
-        // Proje Filtreleme
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const projects = document.querySelectorAll('.project-card');
-
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const filter = btn.getAttribute('data-filter');
-
-                projects.forEach(project => {
-                    if (filter === 'all' || project.getAttribute('data-category') === filter) {
-                        project.style.display = 'block';
-                    } else {
-                        project.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        // 3D Tilt Effect for Cards
-        document.querySelectorAll('.project-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const xRotation = -((y - rect.height/2) / 20);
-                const yRotation = (x - rect.width/2) / 20;
-                
-                card.style.transform = `perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale(1.05)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
-            });
-        });
-
     </script>
 </body>
 </html>
